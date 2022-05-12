@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<launch>
+  <include name="$(find mini_pupper)/launch/bringup.launch"/>
+  <node pkg="mini_pupper_dance" type="dance.py" respawn="false" name="lets_dance" output="screen"/>
+  <node pkg="mini_pupper_dance" type="pose_controller.py" name="pose_controller" output="screen"/>
+</launch>
+
