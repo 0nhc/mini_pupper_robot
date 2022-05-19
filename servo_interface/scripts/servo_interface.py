@@ -18,21 +18,38 @@ def set_servo_angle(pin,angle):
 
 def get_param():
     global servo_configs
-    servo_configs.append(float(rospy.get_param('rf1_initial_angle')))
-    servo_configs.append(float(rospy.get_param('rf2_initial_angle')))
-    servo_configs.append(float(rospy.get_param('rf3_initial_angle')))
-
-    servo_configs.append(float(rospy.get_param('lf1_initial_angle')))
-    servo_configs.append(float(rospy.get_param('lf2_initial_angle')))
-    servo_configs.append(float(rospy.get_param('lf3_initial_angle')))
-
-    servo_configs.append(float(rospy.get_param('rb1_initial_angle')))
-    servo_configs.append(float(rospy.get_param('rb2_initial_angle')))
-    servo_configs.append(float(rospy.get_param('rb3_initial_angle')))
-
-    servo_configs.append(float(rospy.get_param('lb1_initial_angle')))
-    servo_configs.append(float(rospy.get_param('lb2_initial_angle')))
-    servo_configs.append(float(rospy.get_param('lb3_initial_angle')))
+    eeprom = open("/sys/bus/i2c/devices/3-0050/eeprom",'r',encoding="ISO-8859-1")
+    params = eeprom.readlines()
+    param1 = params[0]
+    param1 = param1.split(",")
+    for i in range(len(param1)-1):
+        param1[i] = int(param1[i])
+    
+    param2 = params[1]
+    param2 = param2.split(",")
+    for i in range(len(param2)-1):
+        param2[i] = int(param2[i])
+       
+    param3 = params[2]
+    param3 = param3.split(",")
+    for i in range(len(param3)-1):
+        param3[i] = int(param3[i])
+    # rf
+    servo_configs.append(param1[0]+90)
+    servo_configs.append(param2[0]+90)
+    servo_configs.append(-param3[0]+90)
+    # lf
+    servo_configs.append(param1[1]+90)
+    servo_configs.append(-param2[1]+90)
+    servo_configs.append(param3[1]+90)
+    # rb
+    servo_configs.append(param1[2]+90)
+    servo_configs.append(param2[2]+90)
+    servo_configs.append(-param3[2]+90)
+    # lb
+    servo_configs.append(param1[3]+90)
+    servo_configs.append(-param2[3]+90)
+    servo_configs.append(param3[3]+90)
 
 def callback(data):
     global servo_pins
